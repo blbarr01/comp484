@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Brian Barr -->
+<!-- Professor Kaplan -->
+<!-- Summer 2022; Comp 484, Web Engineering -->
+<!-- lab2: form validation -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <script>
+        /* declerations of element variables  */
+        var userName,
+            password,
+            studentId,
+            semester,
+            year,
+            textBox,
+            btn;
+
+
+        // booleans used to help me check submission status and display proper error warnings
+        var userNameBool = false,
+            passwordBool = false,
+            studentIdBool = false,
+            semesterBool = false,
+            yearBool = false,
+            textBoxBool = false;
+
+        // error message dictionary
+        const errorMessages = {
+            username: "the username must be lowercase",
+            password: " you must have a special character, uppercase and lowercase letter, and a number",
+            studentId: "Student Ids must be 9 digits long",
+            startSemester: " a start date cannot be in the future",
+            empty: " and no field can be left empty"
+        }
+
+        function checkUserName(e) {
+            var input = userName.value.trim();
+            var validFlag;
+            /* 
+            checks for empty string 
+            depending on the event type a class corresponding to a visual que
+            is assigned 
+            */
+            if (input === "" && e.type == "blur") {
+                userName.removeAttribute("class");
+                document.getElementById("uname-error").innerHTML = "";
+                return
+            }
+
+            if (input === "" && e.type == "click") {
+                userName.setAttribute("class", "alert");
+                return
+            }
+            /* check for invalid characters  */
+            for (var i = 0; i < input.length; i++) {
+                /* if the given character isn't lowercase or a " " */
+                if ((input.charAt(i) < 'a' || input.charAt(i) > 'z') && input.charAt(i) !== "") {
+                    // console.log("invalid character: " + input.charAt(i));
+                    validFlag = false;
+                    break;
+                }
+                else {
+                    validFlag = true;
+                }
+            }
+
+            validFlag ? userName.setAttribute("class", "valid") : userName.setAttribute("class", "alert");
+            validFlag ? userNameBool = true : userNameBool = false;
+        }
+
+        function checkPassword(e) {
+            // flags used to  verify password reqs
+            var specialCharFlag = false;
+            var upperCharFlag = false;
+            var lowerCharFlag = false;
+            var numFlag = false;
+
+            var input = password.value;
+            // can capture the event types and have things respond accordingly 
+            var eType = e.type;
+            
+            /*
+            -iterate through the input string  
+            -check for a lowecase char, uppercase char,
+            special char, and number
+            -set appropriate flags
+            */
+            for (var i = 0; i < input.length; i++) {
+                if (input.charAt(i) >= 'a' && input.charAt(i) <= 'z') {
+                    lowerCharFlag = true;
+                }
+                if (input.charAt(i) >= 'A' && input.charAt(i) <= 'Z') {
+                    upperCharFlag = true;
+                }
+                if ((input.charAt(i) >= '!' && input.charAt(i) <= '/')
+                    || (input.charAt(i) >= ':' && input.charAt(i) <= '@')) {
+                    specialCharFlag = true;
+                }
+                if (input.charAt(i) >= '0' && input.charAt(i) <= '9') {
+                    numFlag = true;
+                }
+            }
+
+            /* check if any of the requirements are missing , flag it */
+            if (specialCharFlag == false ||
+                upperCharFlag == false ||
+                lowerCharFlag == false ||
+                numFlag == false) {
+                /* specialized check for if the password field is left empty */
+                if (input === "" && e.type === "blur") {
+                    password.removeAttribute("class");
+                    document.getElementById("pword-error").innerHTML = ""
+                    return
+                }
+                password.setAttribute("class", "alert");
+                passwordBool = false;
+            }
+            else {
+                password.setAttribute("class", "valid")
+                passwordBool = true;
+
+            }
+
+
+        }
+
+        function checkStudentId(e) {
+            var nonNumFlag = false
+            var input = studentId.value;
+
+            if (input === '' && e.type === "blur") {
+                studentId.removeAttribute("class")
+                document.getElementById("id-error").innerHTML = ""
+                return
+            }
+
+            if (input === '' && e.type === "click") {
+                studentId.setAttribute("class", "alert")
+                studentIdBool = false;
+                return
+            }
+
+            if (input.length != 9) {
+                studentId.setAttribute("class", "alert")
+                studentIdBool = false;
+                return;
+            }
+
+            for (let i = 0; i < input.length; i++) {
+                /* if there's an invalid character flag it */
+                if (input.charAt(i) < '0' || input.charAt(i) > '9') {
+                    nonNumFlag = true;
+                }
+            }
+
+            // set respective visual ques for fail and success
+            if (nonNumFlag === true) {
+                studentId.setAttribute("class", "alert")
+                studentIdBool = false;
+            }
+            else {
+                studentId.setAttribute("class", "valid")
+                studentIdBool = true
+            }
+
+        }
+
+        function checkSemester(e) {
+            var input = semester.value.trim()
+            // tabing off the semester input threw an error if it was blank 
+            // this stopped the error
+            if (input === "" && e.type === "blur") {
+                semester.setAttribute("class", 'semester-input')
+                document.getElementById("date-error").innerHTML = ""
+                return;
+            }
+
+            if (input === "" && e.type === "click") {
+                semester.setAttribute("class", 'semester-input alert')
+                semesterBool = false;
+                return;
+            }
+
+            // auto capitalizes first string of the input
+            semester.value = input[0].toUpperCase() + input.substring(1, input.length).toLowerCase();
+            input = semester.value;
+
+            //once again demorgans law got you! 
+            // originally had || here
+            if (input !== "Fall" && input !== "Spring" && input !== "Summer") {
+                semester.setAttribute("class", "semester-input alert");
+                semesterBool = false;
+                return;
+            }
+            semester.setAttribute("class", "semester-input valid");
+            semesterBool = true;
+        }
+
+        function checkYear(e) {
+            var input = year.value
+            var sem = semester.value
+            // need to grab the length here so it can be used in the value check
+            var currLen = input.length;
+
+
+            if (input === "" && e.type == "blur") {
+                year.setAttribute("class", "semester-input")
+                document.getElementById("date-error").innerHTML = ""
+                return
+            }
+            if (input === "" && e.type === "click") {
+                year.setAttribute("class", "semester-input alert")
+                yearBool = false;
+                return
+            }
+
+
+
+            //demorgans caught you here too!! 
+            if (input.length !== 2 && input.length !== 4) {
+                year.setAttribute("class", "semester-input alert")
+                yearBool = false;
+                return
+            }
+
+            input = parseInt(input, 10)
+            //console.log("input after parse: " + input);
+            //console.log(typeof (input));
+
+            /* lengthy logic portion to make sure the year is valid with the given semmester */
+            // write special cases for fall
+            if (sem === "Fall" && currLen === 2) {
+                if (input > 21) {
+                    year.setAttribute("class", "semester-input alert")
+                    yearBool = false;
+                    return;
+                }
+            }
+            if (sem === "Fall" && currLen === 4) {
+                if (input > 2021) {
+                    year.setAttribute("class", "semester-input alert");
+                    yearBool = false;
+                    return;
+                }
+
+            }
+
+            if (sem === "Spring" || sem === "Summer") {
+                if (currLen === 2) {
+                    if (input > 22) {
+                        year.setAttribute("class", "semester-input alert");
+                        yearBool = false;
+                        return
+                    }
+                }
+
+                if (currLen === 4) {
+                    if (input > 2022) {
+                        year.setAttribute("class", "semester-input alert");
+                        yearBool = false; 
+                        return
+                    }
+                }
+            }
+
+            year.setAttribute("class", "semester-input valid");
+            document.getElementById("date-error").innerHTML = "";
+            yearBool = true; 
+        }
+
+        function checkTextArea(e, max) {
+            var input = textBox.value
+            var wordCountlabel = document.getElementById("message-word-count")
+            // make it so the word count display cannot be tabbed on for improved ux
+            wordCountlabel.tabIndex = -1; 
+            var remaining;
+            // console.log(input);
+
+            // special case to check if the input is empty and set the remaining prompt accordingly
+            if (input === "") {
+                remaining = max
+                wordCountlabel.innerHTML = "remaining " + remaining + "/25";
+                return
+            }
+            var wordCount = input.split(" ");
+            // console.log("type of tokens: "+typeof(wordCount));
+            // console.log(wordCount);
+
+            remaining = max - wordCount.length;
+            wordCountlabel.innerHTML = "remaining " + remaining + "/25";
+
+            if (wordCount.length >= max) {
+                e.preventDefault();
+            }
+        }
+
+        /* a utility function to limit input to numbers only */
+        function numOnly(e) {
+            //captures the ascii /utf-8 char code 
+            var keyCode = e.keyCode;
+
+            if (keyCode < 48 || keyCode > 57) {
+                e.preventDefault();
+            }
+        }
+
+        /* 
+            used to limit the length of the input; 
+            the limiter parameter specifies how long an input can be 
+            used to gently guide the input for the year and student id input 
+            limiter improves modularity
+        */
+        function stringLimiter(e, limiter) {
+            var input = e.target.value;
+
+            if (input.length >= limiter) {
+                e.preventDefault();
+            }
+        }
+
+        function processForm() {
+            var wineRed = "#722F37"
+            var englishRacingGreen = "#004225"
+            
+            //check global bools and display appropriate errors
+            if (userNameBool === false) {
+                var el = document.getElementById("uname-error")
+                //for some reason value property didn't work // look into this
+                el.innerHTML = errorMessages.username + errorMessages.empty;
+                document.querySelector("body").style.backgroundColor = wineRed ; 
+            }
+            if (passwordBool === false) {
+                var el = document.getElementById("pword-error")
+                el.innerHTML = errorMessages.password + errorMessages.empty;
+                document.querySelector("body").style.backgroundColor = wineRed;
+
+            }
+            if (studentIdBool === false) {
+                var el = document.getElementById("id-error")
+                el.innerHTML = errorMessages.studentId + errorMessages.empty;
+                document.querySelector("body").style.backgroundColor = wineRed;
+
+            }
+            if (semesterBool === false || yearBool === false) {
+                var el = document.getElementById("date-error")
+                el.innerHTML = errorMessages.startSemester + errorMessages.empty;
+                document.querySelector("body").style.backgroundColor = wineRed;
+            }
+            //if valid submission
+            if(userNameBool !== false && passwordBool !== false
+                && studentIdBool !== false && semesterBool !== false && yearBool !== false){
+                    var el = document.querySelector("#success-msg");
+                    el.innerHTML = "Success!"
+                    el.style.textAlign = "center"
+                    el.style.color = "rgb(46, 221, 46)" // same color as input.valid modifier 
+                    document.querySelector("body").style.backgroundColor = englishRacingGreen; //english racing green
+            }
+        }
+
+        function init() {
+            console.log("hello init");
+            //assign dom elements to their respective js objs 
+            userName = document.getElementById("UserName");
+            password = document.getElementById("password");
+            studentId = document.getElementById("student-id");
+            semester = document.getElementById("semester");
+            year = document.getElementById("year");
+            textBox = document.getElementById("text-box")
+            btn = document.getElementById("submit-btn");
+
+            // create the event listeners
+            //main event listener for form
+            btn.addEventListener("click", (e) => {
+                console.log("you clicked me");
+                checkPassword(e); checkUserName(e); checkStudentId(e); 
+                checkSemester(e); checkYear(e); processForm();
+            });
+
+            userName.addEventListener("blur", checkUserName);
+            password.addEventListener("blur", checkPassword);
+
+            studentId.addEventListener("keypress", numOnly);
+            studentId.addEventListener("keypress", (e) => stringLimiter(e, 9));
+            studentId.addEventListener("blur", checkStudentId);
+
+            semester.addEventListener("blur", checkSemester);
+
+            year.addEventListener("keypress", numOnly);
+            year.addEventListener("keypress", (e) => stringLimiter(e, 4));
+            year.addEventListener("blur", checkYear);
+
+            textBox.addEventListener("keypress", (e) => checkTextArea(e, 25))
+            textBox.addEventListener("blur", (e) => checkTextArea(e, 25))
+
+        }
+
+        window.addEventListener("load", init);
+    </script>
+
+    <Style>
+        body {
+            background-color: #2c3e50;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .container {
+            background-color: #fff;
+            margin: auto;
+            height: fit-content;
+            width: fit-content;
+            padding: 3em;
+            border-radius: .66rem;
+            margin-bottom: 3em;
+        }
+
+        label {
+            display: none;
+        }
+
+        .form-element {
+            margin: 3em;
+            /* border: 2px solid lightgreen; */
+            text-align: center;
+        }
+
+        input {
+            height: 2.25rem;
+            font-size: 1.25rem;
+            border: none;
+            border-bottom: 2px solid #2c3e50;
+            font-weight: 100;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-bottom: 4px solid #8eadcd;
+        }
+
+        input.alert {
+            border-bottom: 2px solid red;
+        }
+
+        input.valid {
+            border-bottom: 2px solid rgb(46, 221, 46);
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        h1 {
+            color: #fff;
+            font-weight: 700;
+            font-size: 4.25rem;
+            margin-bottom: 5px;
+        }
+
+        #subtitle {
+            color: #fff;
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 3em;
+            font-size: 1.25rem;
+        }
+
+        h2 {
+            font-size: 2.25rem;
+            color: #2c3e50;
+        }
+
+        button {
+            margin: 0 auto;
+            padding: 1.25rem 2.50rem;
+            border-radius: 3.25rem;
+            background: #2c3e50;
+            color: #fff;
+            border: none;
+            font-size: 1.25rem;
+        }
+
+        button:hover {
+            border: 4px solid #8eadcd;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        #semester {
+            margin-right: 5px;
+        }
+
+        .semester-input {
+            display: inline;
+            width: 50%;
+            /* border: 2px solid red; */
+        }
+
+        .semester-container {
+            display: inline-flex;
+            width: 50%;
+            text-align: center;
+            /* border: 2px solid rebeccapurple; */
+        }
+
+        /* max width was chosen based on chrome devtool-kit preset for large phone */
+        @media screen and (max-width:425px) {
+            .semester-container {
+                display: block;
+                width: 100%;
+                /* a little odd but produces really nice mobile layout */
+                margin-top: -3em;
+            }
+
+            .semester-input {
+                width: 100%;
+                margin-top: 2.5em;
+            }
+            textarea{
+                min-width:100%;
+            }
+
+            h1{
+                font-size: 3.25rem;
+            }
+        }
+
+        p.error-box{
+            color: red;
+            font-weight: bolder;
+            max-width: fit-content;
+        }
+
+
+
+        textarea {
+            font-style: inherit;
+            width: 50%;
+            height: 7em;
+            box-sizing: border-box;
+            font-size: 1.10rem;
+        }
+
+        textarea:focus {
+            outline: 2px solid #8eadcd;
+        }
+    </Style>
+
+    <title>Lab2</title>
+</head>
+
+<body>
+    <h1 class="center">Fake Business</h1>
+    <p id="subtitle"> Because all business is fake business until finalized - Tim Dillon</p>
+    <div class="container">
+        <h2 class="center">Sign Up</h2>
+        <form action="Get" id="main-form">
+            <div class="form-element">
+                <p class="error-box" id="uname-error"></p>
+                <label for="UserName">Username</label>
+                <input type="text" autocomplete="name" name="uname" id="UserName" placeholder="User Name">
+            </div>
+            <div class="form-element">
+                <p class="error-box" id="pword-error"></p>
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder="Password">
+            </div>
+            <div class="form-element">
+                <p class="error-box" id="id-error"></p>
+                <label for="student-id">Student ID</label>
+                <input type="text" id="student-id" placeholder="Student Id">
+            </div>
+            <div class="form-element">
+                <p class="error-box" id="date-error"></p>
+                <div class="semester-container">
+                    <label for="semester">semester</label>
+                    <input type="text" id="semester" class="semester-input" placeholder="Semester">
+                    <label for="year">year</label>
+                    <input type="text" id="year" class="semester-input" placeholder="Year">
+                </div>
+            </div>
+            <div class="form-element">
+                <label id="text-box-label" for="text-box">message</label>
+                <textarea name="message" id="text-box" placeholder="write to us"></textarea>
+                <p id='message-word-count'></p>
+            </div>
+        </form>
+        <h2 id="success-msg" ></h2>
+        <div class="btn-container">
+            <button type="button" id="submit-btn">Submit</button>
+        </div>
+    </div>
+</body>
+
+</html>

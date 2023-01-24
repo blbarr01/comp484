@@ -1,0 +1,47 @@
+h1{
+    text-align: center;
+}
+body{
+    background-color: #dedede;
+}
+.grid-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: auto 10%;
+    margin-bottom: 5%;
+    /* pulled the specifics for this box shadow from this utility
+     site https://getcssscan.com/css-box-shadow-examples */
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, 
+        rgba(0, 0, 0, 0.12) 0px -12px 30px,
+        rgba(0, 0, 0, 0.12) 0px 4px 6px,
+        rgba(0, 0, 0, 0.17) 0px 12px 13px,
+        rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+/* max width values set based on the dimensions suggested by chromes development tools */
+/* meant to make layout friendly to tablets and phones */
+@media screen and (max-width: 768px) {
+    .grid-container{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media screen and (max-width: 426px) {
+    .grid-container{
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+img{
+    width: 100%;
+    height: 100%;
+    /* border: 2px solid black; */
+}
+
+.image-holder>a{
+    justify-items: center;
+}
+.image-holder{
+    /* border: 2px solid rebeccapurple; */
+    max-height: 760px;
+    text-align: center;
+}

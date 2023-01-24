@@ -1,0 +1,37 @@
+Brian Barr 
+professor: Adam Kaplan
+Comp 484/L web engineering I 
+Lab3 
+
+dir structure 
+
+lab3-   |
+        |- public 
+        |   |-lab3.html
+        |   |-scrpt.js
+        |   |-styles.css 
+        |-server
+        |   |-connection.php
+        |   |-form.html
+        |   |-submit.php
+        |-db
+        |   |-lab3.sql
+        |   |-lab3-c.sql       
+
+Admin credentials 
+    username: Admin
+    password: password
+
+
+The goal of this project is to simulate a server side login / signup form and create a 
+full stack application. Ajax style programing is implemented to make the experience faster and more dynamic. the project makes two ajax requests. one which serializes form data and submits to the server; this request recieves json as a response. The other an 'empty' request for a portion of html upon clicking logout. this was done to practice requests for different response types as well as convenience.
+
+lab3.html is the only content file fetched upon the initial request. Script.js captures the data from the form on lab3.html and performs an ajax request to submit.php; it also handles dynamic rendering depending on the response from submit.php. 
+
+Submit.php makes querys to the database and returns appropriate responses.
+Form.html on the server contains the code for the web form on lab3.html. form.html is fetched 
+upon the user asking to log-out. connection.php establishes a connection to the db and was isolated to its own file for portability.  
+
+lab3-c.sql and lab3.sql are essentially the same file. 
+-c.sql was captured with the command line mysqldump cmd while 
+lab3.sql was captured with the phpMyadmin dump tool

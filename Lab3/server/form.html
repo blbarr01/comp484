@@ -1,0 +1,17 @@
+<p id="returning-prompt" class="container-p">New member? click here</p>
+        <h2 id = title>Log In</h2>
+        <form id = "main-form"action="signup.php" method="GET" autocomplete="off">
+            <input id = "submissionType" type="hidden" name="submissionType" value = "login" >
+            <p id="error-display"></p>
+            <div class="form-element">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" placeholder="username">
+            </div>
+            <div class="form-element">
+                <label for="password"></label>
+                <input type="password" id="password" name="password" placeholder="password" autocomplete="off">
+            </div>
+            <div class="btn-container">
+                <button id = "submit-btn" type="submit" name="submit" value="submit">submit</button>
+            </div>
+        </form>

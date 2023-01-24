@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600&family=Poppins&display=swap');
+
+
+
+body{
+    font-family:'Barlow', sans-serif; 
+    background-color: rgb(114, 106, 106);
+    color: rgb(223, 206, 206);
+}
+
+p{
+    /* border: 2px solid blue; */
+    max-width: 50%;
+    text-align: left;
+    font-size: 1.55rem;
+    color: #fff;
+    padding: 20px;
+}
+
+h1{
+    text-align: center;
+    font-size: 4rem;
+}
+
+form{
+    border: 2px solid white;
+    justify-content: center;
+    padding: 25px;
+
+}
+.background-light-grey{
+    background-color: rgb(184, 175, 175);
+}
+
+
+main, .main-list, .list-header{
+    margin-top: 25px;
+}
+.list-header{
+    font-size: 2rem;
+    font-weight: 300; 
+    text-align: center;
+}
+
+.main-list{
+    border: 2px solid white;
+    padding-bottom: 25px;
+    margin: 2% 5%;
+    display: flex;
+}
+
+@media screen and (max-width: 768px) {
+    .main-list{
+        display: block;
+    }
+}
+
+.main-list-item{
+    list-style: none;
+    font-size: 1.5rem;
+    margin: 20px;
+}
+
+.main-list-item li{
+    font-size: 1.25rem;
+    max-width: 460px;
+}
+
+a:visited{
+    color: #fff;
+}
+
+.btn-container{
+    margin-top: 10px;
+    /* border: 2px solid lightgreen; */
+    padding-left: 45px;
+}
+
+.btn{
+    padding:10px 30px
+}
+
+form > input, form>label{
+    margin: 10px auto;
+}
+
+label{
+    font-size: 1.25rem;
+}
+
+input{
+    height: 1.25rem
+}
+
+/* utilities  */
+.center{
+    display: flex;
+    justify-content: center;
+}
+
+.slight-radius{
+    border-radius: .33rem;
+}
+
+#blurb{
+    max-width: 480px;
+    justify-content: space-around;
+}
